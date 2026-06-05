@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cidade;
 use App\Models\Entrega;
 use App\Models\StatusEntrega;
+use App\Services\GeocodingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
@@ -67,9 +68,18 @@ class EntregaController extends Controller
         /** @var \App\Models\Cliente $cliente */
         $cliente = $request->get('cliente_autenticado');
 
-        #dd($cliente);
+        $geocodingService = app(GeocodingService::class);
+        $address = $geocodingService->buildAddress(
+            $validated['logradouro'],
+            $validated['numero'],
+            $validated['complemento'] ?? null,
+            $validated['bairro'],
+            $viaCepData['localidade'],
+            $viaCepData['uf'],
+        );
+        $coordinates = $geocodingService->geocode($address);
 
-        $entrega = Entrega::create([
+        $entregaData = [
             'cliente_id' => $cliente->id,
             'codigo_pedido' => $validated['codigo_pedido'],
             'cep' => $cep,
@@ -81,7 +91,14 @@ class EntregaController extends Controller
             'nome_destinatario' => $validated['nome_destinatario'],
             'cidade_id' => $cidade->id,
             'status_entrega_id' => $statusPendente->id,
-        ]);
+        ];
+
+        if ($coordinates) {
+            $entregaData['latitude'] = $coordinates['lat'];
+            $entregaData['longitude'] = $coordinates['lng'];
+        }
+
+        $entrega = Entrega::create($entregaData);
 
         return response()->json([
             'success' => true,

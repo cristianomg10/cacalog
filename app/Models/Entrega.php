@@ -16,6 +16,8 @@ class Entrega extends Model
         'numero',
         'complemento',
         'bairro',
+        'latitude',
+        'longitude',
         'conteudo',
         'nome_destinatario',
         'codigo_pedido',

@@ -38,6 +38,16 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('admin.designacao.index') }}" class="nav-link {{ request()->routeIs('admin.designacao.*') ? 'active' : 'text-dark' }}">
+                    <i class="bi bi-diagram-3 me-2"></i> Designação
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.acompanhamento.index') }}" class="nav-link {{ request()->routeIs('admin.acompanhamento.*') ? 'active' : 'text-dark' }}">
+                    <i class="bi bi-eye me-2"></i> Acompanhamento
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('admin.configuracoes.index') }}" class="nav-link {{ request()->routeIs('admin.configuracoes.*') ? 'active' : 'text-dark' }}">
                     <i class="bi bi-gear me-2"></i> Configurações
                 </a>
