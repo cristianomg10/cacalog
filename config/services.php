@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'opencage' => [
+        'key' => env('OPENCAGE_API_KEY', env('OPEN_CAGE_API_KEY', '')),
+    ],
+
 ];

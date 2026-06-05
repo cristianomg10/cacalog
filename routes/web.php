@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\StatusEntregaController;
 use App\Http\Controllers\Admin\CidadeController;
 use App\Http\Controllers\Admin\MotoboyController;
 use App\Http\Controllers\Admin\EntregaController;
+use App\Http\Controllers\Admin\DesignacaoController;
+use App\Http\Controllers\Admin\AcompanhamentoController;
 use App\Http\Controllers\Admin\ClientePlanoController;
 use App\Http\Controllers\Cliente\EntregaController as ClienteEntregaController;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +44,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/clientes/{cliente}/planos/{plano}', [ClientePlanoController::class, 'desvincular'])->name('clientes.planos.desvincular');
     Route::get('/configuracoes', [ConfiguracaoController::class, 'index'])->name('configuracoes.index');
     Route::post('/configuracoes', [ConfiguracaoController::class, 'update'])->name('configuracoes.update');
+    Route::get('/designacao', [DesignacaoController::class, 'index'])->name('designacao.index');
+    Route::post('/designacao', [DesignacaoController::class, 'designar'])->name('designacao.designar');
+    Route::get('/acompanhamento', [AcompanhamentoController::class, 'index'])->name('acompanhamento.index');
 });
 
 Route::middleware(['auth', 'role:cliente'])->group(function () {

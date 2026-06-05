@@ -17,7 +17,21 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <div class="form-text">
-                        Ao criar uma nova entrega, o sistema chamará esta URL para definir automaticamente qual motoboy será responsável pela entrega. Deixe em branco para não utilizar.
+                        Ao confirmar a designação, o sistema enviará as entregas pendentes para esta URL. Use <code>{numero_entregadores}</code> na URL para substituir pela quantidade de motoboys disponíveis. Deixe em branco para não utilizar.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="opencage_api_key" class="form-label">Chave da API OpenCage (Geocoding)</label>
+                    <input type="text" name="opencage_api_key" id="opencage_api_key"
+                           class="form-control @error('opencage_api_key') is-invalid @enderror"
+                           value="{{ old('opencage_api_key', $opencageApiKey) }}"
+                           placeholder="sua_chave_aqui">
+                    @error('opencage_api_key')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <div class="form-text">
+                        Utilizada para converter endereços em coordenadas geográficas exibidas no mapa da tela de designação. Obtenha uma chave gratuita em opencagedata.com.
                     </div>
                 </div>
 
