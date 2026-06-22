@@ -43,43 +43,48 @@
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Motoboys Disponíveis</h5>
+            <form action="{{ route('admin.designacao.designar') }}" method="POST">
+                @csrf
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Motoboys Disponíveis</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        @if($motoboys->isEmpty())
+                            <p class="text-muted text-center py-4 mb-0">Nenhum motoboy cadastrado.</p>
+                        @else
+                            <ul class="list-group list-group-flush">
+                                @foreach($motoboys as $motoboy)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="motoboy_ids[]" value="{{ $motoboy->id }}" id="motoboy_{{ $motoboy->id }}">
+                                            <label class="form-check-label" for="motoboy_{{ $motoboy->id }}">
+                                                {{ $motoboy->nome }}
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-secondary rounded-pill">#{{ $motoboy->id }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
                 </div>
-                <div class="card-body p-0">
-                    @if($motoboys->isEmpty())
-                        <p class="text-muted text-center py-4 mb-0">Nenhum motoboy cadastrado.</p>
-                    @else
-                        <ul class="list-group list-group-flush">
-                            @foreach($motoboys as $motoboy)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ $motoboy->nome }}
-                                    <span class="badge bg-secondary rounded-pill">#{{ $motoboy->id }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-            </div>
 
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <p class="text-muted small mb-3">
-                        Ao confirmar, o sistema chamará a API externa para designar motoboys,
-                        alterará o status para <strong>"Saiu para entrega"</strong> e notificará
-                        as empresas parceiras via callback.
-                    </p>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">
+                            Ao confirmar, o sistema designará os motoboys com base no CEP das entregas,
+                            alterará o status para <strong>"Saiu para entrega"</strong> e notificará
+                            as empresas parceiras via callback.
+                        </p>
 
-                    <form action="{{ route('admin.designacao.designar') }}" method="POST">
-                        @csrf
                         <button type="submit" class="btn btn-primary w-100"
                             {{ $entregas->isEmpty() || $motoboys->isEmpty() ? 'disabled' : '' }}>
                             <i class="bi bi-check-lg me-1"></i> Confirmar Designação
                         </button>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 

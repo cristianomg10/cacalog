@@ -116,3 +116,43 @@ POST /api/entregas
 5. Define o status como "Pendente"
 6. Cria o registro da entrega
 7. Retorna os dados criados com status 201
+
+---
+
+## Webhook / Callback
+
+Sempre que o status de uma entrega é alterado (designação a motoboys ou atualização manual no acompanhamento), o sistema dispara uma requisição HTTP POST para a `url_callback` configurada no cadastro da empresa parceira.
+
+### Requisição enviada
+
+```
+POST {url_callback}
+Content-Type: application/json
+
+{
+    "codigo_pedido": "PED-001",
+    "status": "Saiu para entrega"
+}
+```
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `codigo_pedido` | string | Código do pedido no sistema do parceiro |
+| `status` | string | Novo status da entrega |
+
+### Status possíveis
+
+| Status | Descrição |
+|---|---|
+| `Pendente` | Aguardando designação |
+| `Saiu para entrega` | Designado a um motoboy |
+| `Em Trânsito` | Em rota de entrega |
+| `Entregue` | Entregue ao destinatário |
+| `Cancelado` | Cancelado |
+| `Devolvido` | Devolvido ao remetente |
+
+### Observações
+
+- O timeout da requisição é de **10 segundos**.
+- Falhas no callback **não interrompem** o fluxo principal — apenas são registradas em log.
+- Se a empresa parceira não possuir `url_callback` cadastrada, o callback é ignorado silenciosamente.

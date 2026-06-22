@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Entrega;
 use App\Models\StatusEntrega;
+use App\Services\CallbackService;
+use Illuminate\Http\Request;
 
 class AcompanhamentoController extends Controller
 {
@@ -12,7 +14,7 @@ class AcompanhamentoController extends Controller
     {
         $statusSaiu = StatusEntrega::where('nome', 'Saiu para entrega')->first();
 
-        $entregas = Entrega::with(['cliente', 'cidade', 'motoboy'])
+        $entregas = Entrega::with(['cliente', 'cidade', 'motoboy', 'status'])
             ->where('status_entrega_id', $statusSaiu?->id)
             ->whereNotNull('motoboy_id')
             ->get();
@@ -44,6 +46,24 @@ class AcompanhamentoController extends Controller
                 ];
             });
 
-        return view('admin.acompanhamento.index', compact('entregas', 'motoboys', 'entregasJson'));
+        $statuses = StatusEntrega::orderBy('nome')->get();
+
+        return view('admin.acompanhamento.index', compact('entregas', 'motoboys', 'entregasJson', 'statuses'));
+    }
+
+    public function updateStatus(Request $request, Entrega $entrega, CallbackService $callbackService)
+    {
+        $request->validate([
+            'status_entrega_id' => 'required|exists:status_entregas,id',
+        ]);
+
+        $novoStatus = StatusEntrega::find($request->status_entrega_id);
+        $entrega->status_entrega_id = $novoStatus->id;
+        $entrega->save();
+
+        $callbackService->notify($entrega, $novoStatus->nome);
+
+        return redirect()->route('admin.acompanhamento.index')
+            ->with('success', "Entrega #{$entrega->id} atualizada para \"{$novoStatus->nome}\".");
     }
 }

@@ -47,6 +47,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/designacao', [DesignacaoController::class, 'index'])->name('designacao.index');
     Route::post('/designacao', [DesignacaoController::class, 'designar'])->name('designacao.designar');
     Route::get('/acompanhamento', [AcompanhamentoController::class, 'index'])->name('acompanhamento.index');
+    Route::post('/acompanhamento/{entrega}/status', [AcompanhamentoController::class, 'updateStatus'])->name('acompanhamento.status');
 });
 
 Route::middleware(['auth', 'role:cliente'])->group(function () {

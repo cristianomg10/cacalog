@@ -82,6 +82,8 @@
                                         <th>Motoboy</th>
                                         <th>CEP</th>
                                         <th>Cidade</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -100,6 +102,20 @@
                                             </td>
                                             <td>{{ $entrega->cep }}</td>
                                             <td>{{ $entrega->cidade?->nome }}/{{ $entrega->cidade?->estado }}</td>
+                                            <td>{{ $entrega->status->nome ?? '-' }}</td>
+                                            <td>
+                                                <form action="{{ route('admin.acompanhamento.status', $entrega) }}" method="POST" class="d-flex gap-1">
+                                                    @csrf
+                                                    <select name="status_entrega_id" class="form-select form-select-sm" style="width: auto;">
+                                                        @foreach($statuses as $status)
+                                                            <option value="{{ $status->id }}" {{ $entrega->status_entrega_id == $status->id ? 'selected' : '' }}>
+                                                                {{ $status->nome }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <button type="submit" class="btn btn-sm btn-primary">Atualizar</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
