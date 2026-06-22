@@ -10,16 +10,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => 'admin@cacalog.com'],
+            ['email' => 'cristianooo@gmail.com'],
             [
-                'name' => 'Administrador',
-                'password' => bcrypt('password'),
+                'name' => 'Cristiano',
+                'password' => bcrypt('ifsc123'),
                 'role' => 'admin',
             ]
         );
 
         $this->call([
             StatusEntregaSeeder::class,
+            PlanoEntregaSeeder::class,
+            MotoboySeeder::class,
+            CidadeSeeder::class,
         ]);
     }
 }

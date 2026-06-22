@@ -9,7 +9,7 @@ class StatusEntregaSeeder extends Seeder
 {
     public function run(): void
     {
-        $statuses = ['Pendente', 'Em Trânsito', 'Entregue', 'Cancelado', 'Devolvido'];
+        $statuses = ['Pendente', 'Saiu para entrega', 'Em Trânsito', 'Entregue', 'Cancelado', 'Devolvido'];
 
         foreach ($statuses as $nome) {
             StatusEntrega::firstOrCreate(['nome' => $nome]);
